@@ -33,22 +33,42 @@ canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
 renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
 var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-camera.position.z = 3;
+var camera = new THREE.PerspectiveCamera(
+    50,
+    window.innerWidth / window.innerHeight,
+    1,
+    1000
+);
+camera.position.set(0, 0, 100);
+
+// mouse control
+var controls = new THREE.OrbitControls(camera);
+
+// light
+var directionalLight = new THREE.DirectionalLight("#aaaaff", 0.5);
+directionalLight.position.set(0, 10, 10);
+scene.add(directionalLight);
+//camera.position.y = 2;
 /*
 //BoxGeometry is for dimension
 var geometry = new THREE.BoxGeometry(1, 2, 1);
 var material = new THREE.MeshPhongMaterial({ color: 0x1C4A8C });
 var cube1 = new THREE.Mesh(geometry, material);
-scene.add(cube1);*/
+scene.add(cube1);
 var light = new THREE.DirectionalLight(0xffffff, 0.55);
 light.position.set(0, 0, 1);
-scene.add(light);
+scene.add(light);*/
 var geometry = new THREE.BoxGeometry(1, 1, 1);
-var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-
+var material = new THREE.MeshStandardMaterial({    
+    color: 0xffffff,
+    roughness: 0.53,
+    metalness: 0.79,
+    emissive: 0x757575,
+    emissiveIntensity: 0.3,
+    name: "metal"
+});
 var cubeA = new THREE.Mesh(geometry, material);
-cubeA.position.set(1, 1, 0);
+cubeA.position.set(0, 0, 0);
 
 var cubeB = new THREE.Mesh(geometry, material);
 cubeB.position.set(-1, -1, 0);
