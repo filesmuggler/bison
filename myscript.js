@@ -1,3 +1,6 @@
+
+/* TO DO: Po co ta funkcja? */
+/*
 function onResize(element, callback) {
     var height = element.clientHeight;
     var width = element.clientWidth;
@@ -9,7 +12,20 @@ function onResize(element, callback) {
             callback();
         }
     }, 500);
-}
+}*/
+
+/* TO DO: po co ta funkcja? */
+/*
+onResize(canvas, function () {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+});*/
+
+
+
 /* The first part working */
 var canvas = document.getElementById('canvas');
 var renderer = new THREE.WebGLRenderer({ canvas: canvas });
@@ -44,15 +60,7 @@ group.add(cubeA);
 group.add(cubeB);
 
 scene.add(group);
-/*TO DO: po co ta funkcja*/
-/*
-onResize(canvas, function () {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-    renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
-    camera.aspect = canvas.clientWidth / canvas.clientHeight;
-    camera.updateProjectionMatrix();
-});*/
+
 var rot = 0.0;
 
 var theta1 = 0;
