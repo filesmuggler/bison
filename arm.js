@@ -24,6 +24,7 @@ function init() {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
     renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
+
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
     camera.position.z = 5;
@@ -41,22 +42,15 @@ function init() {
  */
 function placeObjects() {
     var geometry = new THREE.BoxGeometry(1, 1, 1);
-    //var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    var material1 = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    var material2 = new THREE.MeshBasicMaterial({ color: 0x0000ff });
 
-    var material = new THREE.MeshStandardMaterial({
-        side: THREE.FrontSide,
-        color: 0xffffff,
-        roughness: 0.53,
-        metalness: 0.79,
-        emissive: 0x757575,
-        emissiveIntensity: 0.3,
-        name: "metal"
-    });
 
-    var cubeA = new THREE.Mesh(geometry, material);
+
+    var cubeA = new THREE.Mesh(geometry, material1);
     cubeA.position.set(1, 1, 0);
 
-    var cubeB = new THREE.Mesh(geometry, material);
+    var cubeB = new THREE.Mesh(geometry, material2);
     cubeB.position.set(-1, -1, 0);
 
     //create a group and add the two cubes
@@ -74,6 +68,11 @@ function animate() {
     render();
     requestAnimationFrame(animate);
 }*/
+/*
+window.addEventListener('resize', function(){
+    camera.aspect = canvas.clientWidth/canvas.clientHeight;
+    camera.updateProjectionMatrix();
+});*/
 
 /**
  * render() renders the 3D scene
