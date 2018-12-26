@@ -9,13 +9,13 @@ canvas {
     height: 75%;
 }
 
-#main {
+#robot-presentation {
     background-color: #434341;
     color: white;
     width: 70%;
 }
 
-#control {
+#robot-control {
     background-color: #767674;
     color: white;
     padding: 1%;
@@ -26,7 +26,7 @@ h3{
     margin: 1%;
 }
 
-#current-mode{
+#robot-current-mode{
     display: inline;
     color:#1CB0CC;
     font-weight: bold;

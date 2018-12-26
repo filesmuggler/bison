@@ -1,3 +1,59 @@
 <html>
-    
+
+<head>
+    <title>
+        Bison
+    </title>
+
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+    <script src="https://fastcdn.org/three.js/73/three.min.js"></script>
+    <script src="https://threejs.org/build/three.min.js"></script>
+
+    <script src="other.js"></script>
+</head>
+
+<body>
+    <div id="robot-presentation">
+        <h3 id="robot-presentation-header">Robotic Arm Panel</h3>
+        <canvas id="canvas"></canvas>
+    </div>
+    <div id="robot-control">
+        <h3 id="robot-control-header">Control Panel</h3>
+
+        Select proper mode:
+
+        <form id="robot-control-mode-form">
+            <select id="robot-control-mode-select">
+                <option>Forward</option>
+                <option>Inverse</option>
+                <option>Dynamics</option>
+            </select>
+            <input type="button" onclick="getOption()" value="Set mode">
+            <script>
+                
+            </script>
+        </form>
+
+        The current mode used is <span id="robot-current-mode"></span>
+
+        <br>
+        <br>
+        <div id="robot-control-panel">
+            <form id="robot-control-parameters-form">
+                Theta 1<input id="theta1" type="number" name="theta1" value="0">
+                <br>
+                Theta 2<input id="theta2" type="number" name="theta2" value="0">
+                <br>
+                d3<input id="d3" type="number" name="d3" value="0">
+                <br>
+                <input type="button" onclick="moveArm()" value="Move">
+            </form>
+        </div>
+    </div>
+    <!--scripts-->
+    <script src="arm.js"></script>
+
+</body>
+
 </html>
