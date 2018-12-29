@@ -6,6 +6,8 @@ render();
  */
 var camera, scene, renderer, parent, pivot, controls;
 
+var deg90 = 90*Math.PI/180;
+
 /**
  * Variables to hold objects for the arm
  */
@@ -66,6 +68,8 @@ function placeObjects() {
 
     var box = new THREE.BoxGeometry(1, 1, 1);
     var cylinder = new THREE.CylinderGeometry(0.5, 0.5, 1, 64);
+    var sphere = new THREE.SphereGeometry(1,32,32);
+
     var base_material = new THREE.MeshBasicMaterial({ color: 0x767674 });
     var link_material = new THREE.MeshBasicMaterial({ color: 0x434341 });
     var joint_material = new THREE.MeshBasicMaterial({ color: 0x1CB0CC });
@@ -92,6 +96,28 @@ function placeObjects() {
     link2.scale.set(0.5,3,0.5);
     scene.add(link2);
     
+    joint2 = new THREE.Mesh(cylinder, joint_material);
+    joint2.position.set(3,3,-0.5);
+    joint2.scale.set(1,2,1);
+    joint2.rotation.set(0,90*Math.PI/180,90*Math.PI/180);
+    scene.add(joint2);
+
+    link3 = new THREE.Mesh(cylinder, link_material);
+    link3.position.set(4.5,3,-1);
+    link3.rotation.set(0,0,90*Math.PI/180);
+    link3.scale.set(0.5,3,0.5);
+    scene.add(link3);
+
+    joint3 = new THREE.Mesh(box, joint_material);
+    joint3.position.set(6,3,-1);
+    joint3.rotation.set(0,0,0);
+    joint3.scale.set(0.7,0.7,0.7);
+    scene.add(joint3);
+
+    end_effector = new THREE.Mesh(sphere, end_effector_material);
+    end_effector.position.set(6.5,3,-1);
+    end_effector.scale.set(0.2,0.2,0.2);
+    scene.add(end_effector);
     /*
     var cubeA = new THREE.Mesh(geometry, material1);
     cubeA.position.set(1, 1, 0);
