@@ -10,11 +10,17 @@ function getOption() {
 /**
  * moveArm() sets parameters for the joints in direct kinematics
  */
-function moveArm() {
+function getArmParameters() {
+    
+    workingMode = document.getElementById("robot-current-mode").innerHTML;
     theta1 = document.getElementById("theta1").value;
-    console.log(theta1);
+    //console.log(theta1);
     theta2 = document.getElementById("theta2").value;
-    console.log(theta2);
+    //console.log(theta2);
     d3 = document.getElementById("d3").value;
-    console.log(d3);
+    //console.log(d3);
+    var message = workingMode + " " + theta1 + " " + theta2 + " " + d3;
+    console.log(message);
+    var iframe = document.getElementById("myIframe");
+    iframe.contentWindow.postMessage(message, '*');
 }

@@ -12,6 +12,18 @@ var arm_group, joint1_group, joint2_group, joint3_group;
  */
 var base, link1, joint1, link2, joint2, link3, joint3, end_effector;
 
+/**
+ * Data from user
+ */
+var data_from_user;
+
+/**
+ * Parameters for robotic arm movement
+ */
+var workingMode, parameter_1, parameter_2, parameter_3;
+var theta1, theta2, d3;
+var px, py, pz;
+
 
 /**
  * init() is for set up of environment
@@ -48,7 +60,7 @@ function init() {
 
     // camera
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(15, 15, 15);
+    camera.position.set(10, 10, 10);
     //scene.add(camera);
 
     // controls
@@ -64,9 +76,19 @@ function init() {
     // axes
     scene.add(new THREE.AxisHelper(2));
 
-    var light = new THREE.DirectionalLight(0xffffff, 1.0);
-    light.position.set(10, 10, 10);
-    scene.add(light);
+    var light_up = new THREE.PointLight(0xffffff, 3.0, 100);
+    light_up.position.set(0, 10, 0);
+    scene.add(light_up);
+
+    var light_down_1 = new THREE.PointLight(0xffffff, 1.0, 100);
+    light_down_1.position.set(10, 0, 10);
+    scene.add(light_down_1);
+
+    var light_down_2 = new THREE.PointLight(0xffffff, 1.0, 100);
+    light_down_2.position.set(-10, 0, -10);
+    scene.add(light_down_2);
+
+    
 
     placeObjects();
 }
@@ -220,5 +242,45 @@ function render() {
     // actually display the scene in the Dom element
     renderer.render(scene, camera);
     controls.update();
-}
 
+    /**
+     * movement control
+     */
+    if(workingMode==="Forward"){
+
+    }
+    else if(workingMode==="Inverse"){
+        
+    }
+}
+/**
+ * gets data from user
+ */
+window.onmessage = function(e){
+    data_from_user = e.data;
+    data_from_user = data_from_user.split(" ");
+
+    workingMode = data_from_user[0];
+    console.log(workingMode);
+
+    parameter_1 = data_from_user[1];
+    console.log(parameter_1);
+    parameter_2 = data_from_user[2];
+    console.log(parameter_2);
+    parameter_3 = data_from_user[3];
+    console.log(parameter_3);
+    
+    if(workingMode==="Forward"){
+        theta1 = parameter_1;
+        theta2 = parameter_2;
+        d3 = parameter_3;
+    }
+    else if(workingMode==="Inverse"){
+        px = parameter_1;
+        py = parameter_2;
+        pz = parameter_3;
+    }
+    else{
+        alert("wrong mode");
+    }
+};
