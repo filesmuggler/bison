@@ -5,12 +5,12 @@ render();
  * Variables to hold information about the viewer
  */
 var camera, scene, renderer, controls;
-var arm_group, joint1_group, joint2_group, joint3_group;
+var arm_group, joint1_group, joint2_group, joint3_group, end_effector_group;
 
 /**
  * Variables to hold objects for the arm
  */
-var base, link1, joint1, link2, joint2, link3, joint3, end_effector;
+var base, link1, joint1, link2, joint2, link3, joint3, end_effector, end_effector_conn;
 
 /**
  * Data from user
@@ -23,6 +23,8 @@ var data_from_user;
 var workingMode, parameter_1, parameter_2, parameter_3;
 var theta1, theta2, d3;
 var px, py, pz;
+
+var AXIS_jg1 = new THREE.Vector3( 0,0,1 ).normalize();
 
 
 /**
@@ -164,6 +166,8 @@ function placeObjects() {
     link3.position.set(4.5, 3, -1);
     link3.rotation.set(0, 0, 90 * Math.PI / 180);
     link3.scale.set(0.5, 3, 0.5);
+
+    
     //scene.add(link3);
 
     joint3 = new THREE.Mesh(box, joint_material);
@@ -172,29 +176,44 @@ function placeObjects() {
     joint3.scale.set(0.7, 0.7, 0.7);
     //scene.add(joint3);
 
+
     end_effector = new THREE.Mesh(sphere, end_effector_material);
     end_effector.position.set(6.5, 3, -1);
-    end_effector.scale.set(0.2, 0.2, 0.2);
+    end_effector.scale.set(0.25, 0.25, 0.25);
+
+    end_effector_conn = new THREE.Mesh(cylinder, link_material);
+    end_effector_conn.position.set(6.5, 3, -1);
+    end_effector_conn.rotation.set(0, 0, 90 * Math.PI / 180);
+    end_effector_conn.translateY(1.70);
+    end_effector_conn.scale.set(0.25,3,0.25);
+    
 
     //adding the groups and objects to the scene
     arm_group = new THREE.Object3D();
     joint1_group = new THREE.Object3D();
     joint2_group = new THREE.Object3D();
     joint3_group = new THREE.Object3D();
+    end_effector_group = new THREE.Object3D();
 
 
-    joint3_group.add(end_effector);
-    joint3_group.add(joint3);
+    end_effector_group.add(end_effector);
+    end_effector_group.add(end_effector_conn);
 
-    joint2_group.add(joint2);
-    joint2_group.add(link3);
+    joint3_group.add(end_effector_group);
+    
     joint2_group.add(joint3_group);
 
+    joint2_group.add(joint3);
+    joint2_group.add(link3);
+    
+    
+
     joint1_group.add(link2);
-    joint1_group.add(joint1)
+    joint1_group.add(joint2);
     joint1_group.add(joint2_group);
 
     arm_group.add(link1);
+    arm_group.add(joint1);
     arm_group.add(base);
     arm_group.add(joint1_group);
 
@@ -247,7 +266,11 @@ function render() {
      * movement control
      */
     if(workingMode==="Forward"){
-
+        joint1_group.rotation.set(0,theta1*Math.PI/180,0);
+        joint2_group.rotation.set(0,0,theta2*Math.PI/180);
+        end_effector_group.position.set(d3,0,0);
+        //joint2_group.rotation.set(0,0,theta2*Math.PI/180);
+        //workingMode=" ";
     }
     else if(workingMode==="Inverse"){
         
@@ -269,7 +292,7 @@ window.onmessage = function(e){
     console.log(parameter_2);
     parameter_3 = data_from_user[3];
     console.log(parameter_3);
-    
+
     if(workingMode==="Forward"){
         theta1 = parameter_1;
         theta2 = parameter_2;
