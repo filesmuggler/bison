@@ -5,7 +5,11 @@ render();
  * Variables to hold information about the viewer
  */
 var camera, scene, renderer, controls;
-var arm_group, joint1_group, joint2_group, joint3_group, end_effector_group;
+
+/**
+ * deprecated solution
+ */
+//var arm_group, joint1_group, joint2_group, joint3_group, end_effector_group;
 
 /**
  * Variables to hold objects for the arm
@@ -24,7 +28,7 @@ var workingMode, parameter_1, parameter_2, parameter_3;
 var theta1, theta2, d3;
 var px, py, pz;
 
-var AXIS_jg1 = new THREE.Vector3( 0,0,1 ).normalize();
+//var AXIS_jg1 = new THREE.Vector3( 0,1,0 ).normalize();
 
 
 /**
@@ -160,6 +164,7 @@ function placeObjects() {
     joint2.position.set(3, 3, -0.5);
     joint2.scale.set(1, 2, 1);
     joint2.rotation.set(0, 90 * Math.PI / 180, 90 * Math.PI / 180);
+    joint2.add( new THREE.AxisHelper( 2.5 ) );
     //scene.add(joint2);
 
     link3 = new THREE.Mesh(cylinder, link_material);
@@ -201,16 +206,24 @@ function placeObjects() {
 
     joint3_group.add(end_effector_group);
     
+    /*
     joint2_group.add(joint3_group);
 
     joint2_group.add(joint3);
     joint2_group.add(link3);
+    */
     
-    
+    link3.add(joint3);
+    link3.add(joint3_group);
+
+    joint2.add(link3);
+
+    //joint2.add(joint3);
+    //joint2.add(joint3_group);
 
     joint1_group.add(link2);
     joint1_group.add(joint2);
-    joint1_group.add(joint2_group);
+    //joint1_group.add(joint2_group);
 
     arm_group.add(link1);
     arm_group.add(joint1);
@@ -267,10 +280,13 @@ function render() {
      */
     if(workingMode==="Forward"){
         joint1_group.rotation.set(0,theta1*Math.PI/180,0);
-        joint2_group.rotation.set(0,0,theta2*Math.PI/180);
+        //joint2_group.rotation.set(0,0,theta2*Math.PI/180);
         end_effector_group.position.set(d3,0,0);
         //joint2_group.rotation.set(0,0,theta2*Math.PI/180);
         //workingMode=" ";
+        //joint2.rotateOnAxis(AXIS_jg1,0.001);
+        //joint2.rotateOnAxis(AXIS_jg1,theta2*Math.PI/180,0);
+        link3.rotation.set(0,theta2*Math.PI/180,0);
     }
     else if(workingMode==="Inverse"){
         
