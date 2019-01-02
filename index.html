@@ -19,7 +19,7 @@
     <div id="robot-presentation">
         <h3 id="robot-presentation-header">Robotic Arm Panel</h3>
         <!--<canvas id="canvas"></canvas>-->
-        <iframe id="myIframe" src="arm.html" width="100%" height="90%" scrolling="no" frameborder="no"></iframe>
+        <iframe id="myIframe" src="arm.html" scrolling="no" frameborder="no"></iframe>
     </div>
     <div id="robot-control">
         <h3 id="robot-control-header">Control Panel</h3>
@@ -41,11 +41,11 @@
         <br>
         <div id="robot-control-panel">
             <form id="robot-control-parameters-form">
-                Theta 1<input id="theta1" type="number" name="theta1" value="0">
+                Parameter 1<input id="theta1" type="number" name="theta1" value="0">
                 <br>
-                Theta 2<input id="theta2" type="number" name="theta2" value="0">
+                Parameter 2<input id="theta2" type="number" name="theta2" value="0">
                 <br>
-                d3<input id="d3" type="number" name="d3" value="0">
+                Parameter 3<input id="d3" type="number" name="d3" value="0">
                 <br>
                 <input type="button" onclick="getArmParameters()" value="Move">
             </form>
