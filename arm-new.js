@@ -9,6 +9,8 @@ var theta1, theta2, d3;
 var px, py, pz;
 var box, cylinder, sphere, base_material, link_material, joint_material, end_effector_material;
 var parent_joint1, parent_joint2;
+var joint3_pos;
+var increasing = true;
 
 var AXIS = new THREE.Vector3( 0,0,1).normalize();
 
@@ -47,7 +49,7 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     scene = new THREE.Scene();
-    scene.add(new THREE.AxisHelper(25));
+    //scene.add(new THREE.AxisHelper(25));
 
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(10, 10, 10);
@@ -67,16 +69,19 @@ function init() {
     scene.add(light_down_2);
 
     box = new THREE.BoxGeometry(1, 1, 1);
-    cylinder = new THREE.CylinderGeometry(0.5, 0.5, 1, 8);
+    cylinder = new THREE.CylinderGeometry(0.5, 0.5, 1, 64);
+    link_cylinder = new THREE.CylinderGeometry(0.20, 0.20, 3, 64);
+    joint2_cylinder = new THREE.CylinderGeometry(0.5, 0.5, 2, 16);
+    link3_cylinder = new THREE.CylinderGeometry(0.2, 0.2, 3, 16);
     sphere = new THREE.SphereGeometry(1, 32, 32);
 
     base_material = new THREE.MeshStandardMaterial({
-        color: 0x767674,
+        color: 0x000000,
         roughness: 0.53,
-        metalness: 0.79,
+        metalness: 0.09,
         emissive: 0x757575,
-        emissiveIntensity: 0.5,
-        wireframe: true
+        emissiveIntensity: 0.1,
+        wireframe: false
     });
     link_material = new THREE.MeshStandardMaterial({
         color: 0x434341,
@@ -84,7 +89,7 @@ function init() {
         metalness: 0.79,
         emissive: 0x757575,
         emissiveIntensity: 0.5,
-        wireframe: true
+        wireframe: false
     });
     joint_material = new THREE.MeshStandardMaterial({
         color: 0x1CB0CC,
@@ -92,7 +97,7 @@ function init() {
         metalness: 0.79,
         emissive: 0x757575,
         emissiveIntensity: 0.5,
-        wireframe: true
+        wireframe: false
     });
     end_effector_material = new THREE.MeshStandardMaterial({
         color: 0xffffff, 
@@ -100,15 +105,15 @@ function init() {
         metalness: 0.79,
         emissive: 0x757575,
         emissiveIntensity: 0.5,
-        wireframe: true
+        wireframe: false
     });
 
     base = new THREE.Mesh(box, base_material);
     link1 = new THREE.Mesh(cylinder, link_material);
     joint1 = new THREE.Mesh(cylinder, joint_material);
-    link2 = new THREE.Mesh(cylinder, link_material);
-    joint2 = new THREE.Mesh(cylinder, joint_material);
-    link3 = new THREE.Mesh(cylinder, link_material);
+    link2 = new THREE.Mesh(link_cylinder, link_material);
+    joint2 = new THREE.Mesh(joint2_cylinder, joint_material);
+    link3 = new THREE.Mesh(link3_cylinder, link_material);
     joint3 = new THREE.Mesh(box, joint_material);
     end_effector = new THREE.Mesh(sphere, end_effector_material);
 
@@ -135,31 +140,47 @@ function placeObjects(){
     parent_joint1.add(joint1);
 
     joint1.add(link2);
-    link2.position.x=2;
+    link2.position.x=1.9;
     link2.rotation.set(0, 0, -90 * Math.PI / 180);
 
     link2.add(joint2);
     
-    joint2.position.y = 1;
+    joint2.position.y = 1.5;
+    joint2.position.z = -0.5;
     joint2.rotation.set(-90 * Math.PI / 180, 0, 0);
 
     joint2.add(parent_joint2);
     parent_joint2.add(link3);
     link3.rotation.set(-90 * Math.PI / 180, 0, 0)
-    link3.position.y = 1;
-    link3.position.z = 1;
-    link3.scale.set(0.5,2,0.5);
+    link3.position.y = 0.5;
+    link3.position.z = 1.5;
 
-    
+    link3.add(joint3);
+    joint3.position.y = -1.5;
+    joint3.position.z = 0.5;
 
-    
+    joint3.scale.set(0.5,0.5,1.5);
 
+    joint3.add(end_effector);
 
+    end_effector.scale.set(0.5,0.5,0.15);
+
+    end_effector.position.y = -0.75;
+    end_effector.position.z = 0.2;
+
+    parent_joint1.add(link1);
+    link1.position.y = -2.2;
+    link1.scale.set(0.5,3.5,0.5);
+
+    parent_joint1.add(base);
+    base.position.y = -4;
+    base.scale.set(10,0.2,10);
 
 }
 
 function animate(){
-    joint1.rotation.y = 90*Math.PI/180;
-    parent_joint2.rotation.y = 90*Math.PI/180;
-
+    //joint1.rotation.y = 70*Math.PI/180;
+    //parent_joint2.rotation.y = 70*Math.PI/180;
+    joint1.rotation.y += 0.01;
+    parent_joint2.rotation.y += 0.01;
 }
