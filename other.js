@@ -44,6 +44,11 @@ function getOption() {
         document.getElementById("p2").innerHTML = "Py";
         document.getElementById("p3").innerHTML = "Pz";
     }
+    else if(mytext === "Auto") {
+        document.getElementById("p1").innerHTML = "Parameter 1";
+        document.getElementById("p2").innerHTML = "Parameter 2";
+        document.getElementById("p3").innerHTML = "Parameter 3";
+    }
     else {
         document.getElementById("p1").innerHTML = "Parameter 1";
         document.getElementById("p2").innerHTML = "Parameter 2";

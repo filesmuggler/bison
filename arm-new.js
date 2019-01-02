@@ -18,15 +18,11 @@ window.onmessage = function (e) {
     data_from_user = e.data;
     data_from_user = data_from_user.split(" ");
 
+    console.log(data_from_user);
     workingMode = data_from_user[0];
-    //console.log(workingMode);
-
-    parameter_1 = data_from_user[1];
-    //console.log(parameter_1);
-    parameter_2 = data_from_user[2];
-    //console.log(parameter_2);
-    parameter_3 = data_from_user[3];
-    //console.log(parameter_3);
+    parameter_1 = data_from_user[1];    
+    parameter_2 = data_from_user[2];    
+    parameter_3 = data_from_user[3];    
 
     if (workingMode === "Forward") {
         theta1 = parameter_1;
@@ -34,6 +30,11 @@ window.onmessage = function (e) {
         d3 = parameter_3;
     }
     else if (workingMode === "Inverse") {
+        px = parameter_1;
+        py = parameter_2;
+        pz = parameter_3;
+    }
+    else if (workingMode === "Auto") {
         px = parameter_1;
         py = parameter_2;
         pz = parameter_3;
@@ -49,7 +50,6 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     scene = new THREE.Scene();
-    //scene.add(new THREE.AxisHelper(2.5));
 
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(10, 10, 10);
@@ -140,7 +140,6 @@ function init() {
         wireframe: false
     });
 
-
     base = new THREE.Mesh(cylinder, base_material);
     link1 = new THREE.Mesh(cylinder, link_material);
     joint1 = new THREE.Mesh(cylinder, joint_material);
@@ -161,7 +160,6 @@ function init() {
     floor = new THREE.Mesh(box, floor_material);
     cellar = new THREE.Mesh(box, cellar_material);
 
-
     placeObjects();
 }
 
@@ -171,8 +169,6 @@ function render() {
     controls.update();
     animate();
 }
-
-
 
 function placeObjects() {
     scene.add(parent_joint1);
@@ -197,19 +193,16 @@ function placeObjects() {
     link3.position.y = 0.5;
     link3.position.z = -0.7;
 
-
     link3.add(joint3);
     joint3.position.y = -1.5;
-    joint3.position.z = -0.5;
 
-    joint3.scale.set(0.5, 0.5, 1.5);
+    joint3.scale.set(0.7, 0.5, 0.7);
 
     joint3.add(end_effector);
 
-    end_effector.scale.set(0.5, 0.5, 0.15);
+    end_effector.scale.set(0.5, 0.7, 0.5);
 
-    end_effector.position.y = -0.75;
-    end_effector.position.z = -0.35;
+    end_effector.position.y = -1.1;
 
     parent_joint1.add(link1);
     link1.position.y = -2.2;
@@ -246,7 +239,6 @@ function placeObjects() {
     wall4.position.z = 0;
     wall4.position.y = 20.6;
     wall4.scale.set(0.2, 50, 50);
-
 }
 
 function animate() {
@@ -255,29 +247,32 @@ function animate() {
     //joint1.rotation.y += 0.01;
     //parent_joint2.rotation.y += 0.01;
 
-    if (workingMode == "Forward") {
+    console.log(workingMode);
+
+    if (workingMode === "Forward") {
         joint1.rotation.y = theta1 * Math.PI / 180;
         parent_joint2.rotation.y = -theta2 * Math.PI / 180;
         link3.position.z = d3 - 0.7;
     }
-    else if (workingMode == "Inverse") {
+    else if (workingMode === "Inverse") {
 
         theta1 = Math.atan2(py, px);
         x = theta1 / Math.PI * 180;
-        //console.log(x);
         joint1.rotation.y = theta1;
 
         theta2 = Math.atan2(pz, Math.sqrt(px * px + py * py) - link2_len);
         parent_joint2.rotation.y = -theta2;
 
         d3 = Math.sqrt((pz * pz) + (Math.sqrt(px * px + py * py) - link2_len) * (Math.sqrt(px * px + py * py) - link2_len));
-        console.log(d3);
+        //console.log(d3);
         if (d3 > 2.3) {
             d3 = d3 - (d3 - 2.3);
         }
         link3.position.z = d3 - 0.7;
-        //var vector = new THREE.Vector3();
-        //console.log(vector.setFromMatrixPosition(link3.matrixWorld));
+    }
+    else if(workingMode === "Auto"){
+        joint1.rotation.y += 0.01;
+        parent_joint2.rotation.y += 0.01;
     }
 
 }
