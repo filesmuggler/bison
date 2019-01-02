@@ -158,7 +158,7 @@ function placeObjects(){
 
     link3.add(joint3);
     joint3.position.y = -1.5;
-    joint3.position.z = 0.5;
+    joint3.position.z = -0.5;
 
     joint3.scale.set(0.5,0.5,1.5);
 
@@ -167,7 +167,7 @@ function placeObjects(){
     end_effector.scale.set(0.5,0.5,0.15);
 
     end_effector.position.y = -0.75;
-    end_effector.position.z = 0.2;
+    end_effector.position.z = -0.35;
 
     parent_joint1.add(link1);
     link1.position.y = -2.2;
@@ -187,7 +187,7 @@ function animate(){
 
     if(workingMode=="Forward"){
         joint1.rotation.y = theta1*Math.PI/180;
-        parent_joint2.rotation.y = theta2*Math.PI/180;
+        parent_joint2.rotation.y = -theta2*Math.PI/180;
         link3.position.z = d3-0.7;
     }
 }
