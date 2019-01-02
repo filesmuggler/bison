@@ -69,7 +69,7 @@ function init() {
 function placeObjects() {
 
     var box = new THREE.BoxGeometry(1, 1, 1);
-    var cylinder = new THREE.CylinderGeometry(0.5, 0.5, 1, 64);
+    var cylinder = new THREE.CylinderGeometry(0.5, 0.5, 1, 8);
     var sphere = new THREE.SphereGeometry(1, 32, 32);
 
     var base_material = new THREE.MeshStandardMaterial({
@@ -77,48 +77,53 @@ function placeObjects() {
         roughness: 0.53,
         metalness: 0.79,
         emissive: 0x757575,
-        emissiveIntensity: 0.5
+        emissiveIntensity: 0.5,
+        wireframe: true
     });
     var link_material = new THREE.MeshStandardMaterial({
         color: 0x434341,
         roughness: 0.53,
         metalness: 0.79,
         emissive: 0x757575,
-        emissiveIntensity: 0.5
+        emissiveIntensity: 0.5,
+        wireframe: true
     });
     var joint_material = new THREE.MeshStandardMaterial({
         color: 0x1CB0CC,
         roughness: 0.53,
         metalness: 0.79,
         emissive: 0x757575,
-        emissiveIntensity: 0.5
+        emissiveIntensity: 0.5,
+        wireframe: true
     });
     var end_effector_material = new THREE.MeshStandardMaterial({
         color: 0xffffff, 
         roughness: 0.53,
         metalness: 0.79,
         emissive: 0x757575,
-        emissiveIntensity: 0.5
+        emissiveIntensity: 0.5,
+        wireframe: true
     });
 
     parent = new THREE.Object3D();
     scene.add(parent);
+    scene.add(new THREE.AxisHelper(25));
 
     pivot = new THREE.Object3D();
     parent.add(pivot);
 
     base = new THREE.Mesh(box, base_material);
-    base.position.set(0, 0, 0);
+    base.position.set(0, -3, 0);
     base.scale.set(3, 0.1, 3);
     parent.add(base);
 
     link1 = new THREE.Mesh(cylinder, link_material);
-    link1.position.set(0, 1.5, 0);
+    link1.position.set(0, -1.5, 0);
     link1.scale.set(0.5, 3, 0.5);
     parent.add(link1);
 
     joint1 = new THREE.Mesh(cylinder, joint_material);
-    joint1.position.set(0, 3, 0);
+    joint1.position.set(0, 0, 0);
     joint1.scale.set(1, 1, 1);
     parent.add(joint1);
 
@@ -220,7 +225,7 @@ function render() {
 
     /**
      * movement control
-     */
+     *
     if(workingMode==="Forward"){
         //joint1_group.rotation.set(0,theta1*Math.PI/180,0);
         //joint1.rotateOnAxis(AXIS_jg1,theta1*Math.PI/180);
@@ -232,7 +237,7 @@ function render() {
     }
     else if(workingMode==="Inverse"){
         
-    }
+    }*/
 }
 /**
  * gets data from user
