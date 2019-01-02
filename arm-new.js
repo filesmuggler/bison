@@ -12,8 +12,7 @@ var parent_joint1, parent_joint2;
 var joint3_pos;
 var increasing = true;
 var link2_len = 3;
-
-var AXIS = new THREE.Vector3(0, 0, 1).normalize();
+var wall1, wall2, wall3, wall4, floor, cellar;
 
 window.onmessage = function (e) {
     data_from_user = e.data;
@@ -50,24 +49,32 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     scene = new THREE.Scene();
-    scene.add(new THREE.AxisHelper(2.5));
+    //scene.add(new THREE.AxisHelper(2.5));
 
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(10, 10, 10);
 
     controls = new THREE.OrbitControls(camera);
+    controls.maxPolarAngle = Math.PI / 1.85;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.2;
+    controls.minDistance = 5;
+    controls.maxDistance = 25;
 
-    var light_up = new THREE.PointLight(0xffffff, 3.0, 100);
-    light_up.position.set(0, 10, 0);
-    scene.add(light_up);
+    this.minDistance = 0;
+    this.maxDistance = 30;
 
-    var light_down_1 = new THREE.PointLight(0xffffff, 1.0, 100);
-    light_down_1.position.set(10, 0, 10);
-    scene.add(light_down_1);
+    var light_1 = new THREE.PointLight(0xffffff, 3.0, 100);
+    light_1.position.set(0, 20, 0);
+    scene.add(light_1);
 
-    var light_down_2 = new THREE.PointLight(0xffffff, 1.0, 100);
-    light_down_2.position.set(-10, 0, -10);
-    scene.add(light_down_2);
+    var light_2 = new THREE.PointLight(0xffffff, 1.0, 100);
+    light_2.position.set(20, 0, 20);
+    scene.add(light_2);
+
+    var light_3 = new THREE.PointLight(0xffffff, 1.0, 100);
+    light_3.position.set(-20, 0, -20);
+    scene.add(light_3);
 
     box = new THREE.BoxGeometry(1, 1, 1);
     cylinder = new THREE.CylinderGeometry(0.5, 0.5, 1, 64);
@@ -108,8 +115,33 @@ function init() {
         emissiveIntensity: 0.5,
         wireframe: false
     });
+    wall_material = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.53,
+        metalness: 0.9,
+        emissive: 0x757575,
+        emissiveIntensity: 0.5,
+        wireframe: false
+    });
+    floor_material = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.53,
+        metalness: 0.9,
+        emissive: 0x757575,
+        emissiveIntensity: 0.5,
+        wireframe: false
+    });
+    cellar_material = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.53,
+        metalness: 0.9,
+        emissive: 0x757575,
+        emissiveIntensity: 0.5,
+        wireframe: false
+    });
 
-    base = new THREE.Mesh(box, base_material);
+
+    base = new THREE.Mesh(cylinder, base_material);
     link1 = new THREE.Mesh(cylinder, link_material);
     joint1 = new THREE.Mesh(cylinder, joint_material);
     link2 = new THREE.Mesh(link_cylinder, link_material);
@@ -120,6 +152,15 @@ function init() {
 
     parent_joint1 = new THREE.Object3D();
     parent_joint2 = new THREE.Object3D();
+
+    wall1 = new THREE.Mesh(box, wall_material);
+    wall2 = new THREE.Mesh(box, wall_material);
+    wall3 = new THREE.Mesh(box, wall_material);
+    wall4 = new THREE.Mesh(box, wall_material);
+
+    floor = new THREE.Mesh(box, floor_material);
+    cellar = new THREE.Mesh(box, cellar_material);
+
 
     placeObjects();
 }
@@ -176,7 +217,35 @@ function placeObjects() {
 
     parent_joint1.add(base);
     base.position.y = -4;
-    base.scale.set(10, 0.2, 10);
+    base.scale.set(5, 0.2, 5);
+
+    parent_joint1.add(floor);
+    floor.position.y = -4.4;
+    floor.scale.set(50, 0.2, 50);
+
+    parent_joint1.add(wall1);
+    wall1.position.x = 0;
+    wall1.position.z = 25;
+    wall1.position.y = 20.6;
+    wall1.scale.set(50, 50, 0.2);
+
+    parent_joint1.add(wall2);
+    wall2.position.x = 0;
+    wall2.position.z = -25;
+    wall2.position.y = 20.6;
+    wall2.scale.set(50, 50, 0.2);
+
+    parent_joint1.add(wall3);
+    wall3.position.x = 25;
+    wall3.position.z = 0;
+    wall3.position.y = 20.6;
+    wall3.scale.set(0.2, 50, 50);
+
+    parent_joint1.add(wall4);
+    wall4.position.x = -25;
+    wall4.position.z = 0;
+    wall4.position.y = 20.6;
+    wall4.scale.set(0.2, 50, 50);
 
 }
 
@@ -193,20 +262,20 @@ function animate() {
     }
     else if (workingMode == "Inverse") {
 
-        theta1 = Math.atan2(py,px);
-        x = theta1/Math.PI*180;
+        theta1 = Math.atan2(py, px);
+        x = theta1 / Math.PI * 180;
         //console.log(x);
         joint1.rotation.y = theta1;
 
-        theta2 = Math.atan2(pz,Math.sqrt(px*px+py*py)-link2_len);
+        theta2 = Math.atan2(pz, Math.sqrt(px * px + py * py) - link2_len);
         parent_joint2.rotation.y = -theta2;
 
-        d3 = Math.sqrt((pz*pz)+(Math.sqrt(px*px+py*py)-link2_len)*(Math.sqrt(px*px+py*py)-link2_len));
+        d3 = Math.sqrt((pz * pz) + (Math.sqrt(px * px + py * py) - link2_len) * (Math.sqrt(px * px + py * py) - link2_len));
         console.log(d3);
-        if(d3>2.3){
-            d3 = d3 - (d3-2.3);
+        if (d3 > 2.3) {
+            d3 = d3 - (d3 - 2.3);
         }
-        link3.position.z = d3-0.7;
+        link3.position.z = d3 - 0.7;
         //var vector = new THREE.Vector3();
         //console.log(vector.setFromMatrixPosition(link3.matrixWorld));
     }
