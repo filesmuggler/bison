@@ -41,17 +41,21 @@
         <br>
         <div id="robot-control-panel">
             <form id="robot-control-parameters-form">
-                Parameter 1<input id="theta1" type="number" name="theta1" value="0">
+                <span id="p1"></span><input id="theta1" type="number" name="theta1" value="0">
                 <br>
-                Parameter 2<input id="theta2" type="number" name="theta2" value="0">
+                <span id="p2"></span><input id="theta2" type="number" name="theta2" value="0">
                 <br>
-                Parameter 3<input id="d3" type="number" name="d3" value="0">
+                <span id="p3"></span><input id="d3" type="number" name="d3" value="0">
                 <br>
                 <input type="button" onclick="getArmParameters()" value="Move">
             </form>
+            <script>
+                initNames();
+            </script>
+            <input type="button" onclick="resetArm()" value="Home Position">
         </div>
     </div>
-    <!--<script src="arm.js"></script>-->
+    
 
 </body>
 
