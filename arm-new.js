@@ -190,4 +190,8 @@ function animate(){
         parent_joint2.rotation.y = -theta2*Math.PI/180;
         link3.position.z = d3-0.7;
     }
+    else if(workingMode=="Inverse"){
+        
+    }
+
 }
