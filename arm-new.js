@@ -11,34 +11,35 @@ var box, cylinder, sphere, base_material, link_material, joint_material, end_eff
 var parent_joint1, parent_joint2;
 var joint3_pos;
 var increasing = true;
+var link2_len = 3;
 
-var AXIS = new THREE.Vector3( 0,0,1).normalize();
+var AXIS = new THREE.Vector3(0, 0, 1).normalize();
 
-window.onmessage = function(e){
+window.onmessage = function (e) {
     data_from_user = e.data;
     data_from_user = data_from_user.split(" ");
 
     workingMode = data_from_user[0];
-    console.log(workingMode);
+    //console.log(workingMode);
 
     parameter_1 = data_from_user[1];
-    console.log(parameter_1);
+    //console.log(parameter_1);
     parameter_2 = data_from_user[2];
-    console.log(parameter_2);
+    //console.log(parameter_2);
     parameter_3 = data_from_user[3];
-    console.log(parameter_3);
+    //console.log(parameter_3);
 
-    if(workingMode==="Forward"){
+    if (workingMode === "Forward") {
         theta1 = parameter_1;
         theta2 = parameter_2;
         d3 = parameter_3;
     }
-    else if(workingMode==="Inverse"){
+    else if (workingMode === "Inverse") {
         px = parameter_1;
         py = parameter_2;
         pz = parameter_3;
     }
-    else{
+    else {
         alert("wrong mode");
     }
 };
@@ -49,7 +50,7 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     scene = new THREE.Scene();
-    //scene.add(new THREE.AxisHelper(25));
+    scene.add(new THREE.AxisHelper(2.5));
 
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(10, 10, 10);
@@ -100,7 +101,7 @@ function init() {
         wireframe: false
     });
     end_effector_material = new THREE.MeshStandardMaterial({
-        color: 0xffffff, 
+        color: 0xffffff,
         roughness: 0.53,
         metalness: 0.79,
         emissive: 0x757575,
@@ -123,28 +124,28 @@ function init() {
     placeObjects();
 }
 
-function render(){
+function render() {
     requestAnimationFrame(render);
-    renderer.render(scene,camera);
+    renderer.render(scene, camera);
     controls.update();
     animate();
 }
 
 
 
-function placeObjects(){
+function placeObjects() {
     scene.add(parent_joint1);
 
-    joint1.position.set(0,0,0);
+    joint1.position.set(0, 0, 0);
 
     parent_joint1.add(joint1);
 
     joint1.add(link2);
-    link2.position.x=1.9;
+    link2.position.x = 1.9;
     link2.rotation.set(0, 0, -90 * Math.PI / 180);
 
     link2.add(joint2);
-    
+
     joint2.position.y = 1.5;
     joint2.position.z = -0.5;
     joint2.rotation.set(-90 * Math.PI / 180, 0, 0);
@@ -154,44 +155,60 @@ function placeObjects(){
     link3.rotation.set(-90 * Math.PI / 180, 0, 0)
     link3.position.y = 0.5;
     link3.position.z = -0.7;
-    
+
 
     link3.add(joint3);
     joint3.position.y = -1.5;
     joint3.position.z = -0.5;
 
-    joint3.scale.set(0.5,0.5,1.5);
+    joint3.scale.set(0.5, 0.5, 1.5);
 
     joint3.add(end_effector);
 
-    end_effector.scale.set(0.5,0.5,0.15);
+    end_effector.scale.set(0.5, 0.5, 0.15);
 
     end_effector.position.y = -0.75;
     end_effector.position.z = -0.35;
 
     parent_joint1.add(link1);
     link1.position.y = -2.2;
-    link1.scale.set(0.5,3.5,0.5);
+    link1.scale.set(0.5, 3.5, 0.5);
 
     parent_joint1.add(base);
     base.position.y = -4;
-    base.scale.set(10,0.2,10);
+    base.scale.set(10, 0.2, 10);
 
 }
 
-function animate(){
+function animate() {
     //joint1.rotation.y = 70*Math.PI/180;
     //parent_joint2.rotation.y = 70*Math.PI/180;
     //joint1.rotation.y += 0.01;
     //parent_joint2.rotation.y += 0.01;
 
-    if(workingMode=="Forward"){
-        joint1.rotation.y = theta1*Math.PI/180;
-        parent_joint2.rotation.y = -theta2*Math.PI/180;
-        link3.position.z = d3-0.7;
+    if (workingMode == "Forward") {
+        joint1.rotation.y = theta1 * Math.PI / 180;
+        parent_joint2.rotation.y = -theta2 * Math.PI / 180;
+        link3.position.z = d3 - 0.7;
     }
-    else if(workingMode=="Inverse"){
-        
+    else if (workingMode == "Inverse") {
+
+        theta1 = Math.atan2(py,px);
+        x = theta1/Math.PI*180;
+        //console.log(x);
+        joint1.rotation.y = theta1;
+
+        theta2 = Math.atan2(pz,Math.sqrt(px*px+py*py)-link2_len);
+        parent_joint2.rotation.y = -theta2;
+
+        d3 = Math.sqrt((pz*pz)+(Math.sqrt(px*px+py*py)-link2_len)*(Math.sqrt(px*px+py*py)-link2_len));
+        console.log(d3);
+        if(d3>2.3){
+            d3 = d3 - (d3-2.3);
+        }
+        link3.position.z = d3-0.7;
+        //var vector = new THREE.Vector3();
+        //console.log(vector.setFromMatrixPosition(link3.matrixWorld));
     }
 
 }
